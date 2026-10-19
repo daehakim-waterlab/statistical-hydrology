@@ -1,0 +1,75 @@
+# Book settings: https://jupyterbook.org/en/stable/customize/config.html
+title: Statistical Hydrology
+author: Daeha Kim
+copyright: "Daeha Kim"
+only_build_toc_files: true
+exclude_patterns: [README.md, LICENSE, docs, labs]
+
+# Code cells are run on every build, so figures and tables always come from the current code.
+# Cell tags: hide-input = code folded, output shown; remove-input = output only;
+# remove-cell = run but not shown (plot style, values glued into the text).
+# A cell that raises an error fails the build (CI builds with --warningiserror).
+execute:
+  execute_notebooks: force
+  timeout: 300
+  allow_errors: false
+
+parse:
+  myst_enable_extensions:
+    - amsmath      # \begin{align} ... \end{align}
+    - dollarmath   # $inline$ and $$display$$ math, rendered by MathJax
+    - colon_fence
+    - deflist
+    - html_image
+    - substitution
+
+repository:
+  url: https://github.com/daehakim-waterlab/statistical-hydrology
+  branch: main
+
+html:
+  baseurl: https://hydroclimatol.com/statistical-hydrology/
+  use_repository_button: true
+  use_issues_button: false
+  use_edit_page_button: false
+  home_page_in_navbar: true
+  # Footer: "© Daeha Kim" and the license (replaces the default "By ... © Copyright ..." lines).
+  extra_footer: |
+    <p>
+      © Daeha Kim. Licensed under
+      <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="license">CC BY-NC 4.0</a>
+      <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="height:1em;margin-left:.2em;vertical-align:text-bottom;">
+      <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="height:1em;margin-left:.2em;vertical-align:text-bottom;">
+      <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="height:1em;margin-left:.2em;vertical-align:text-bottom;">
+    </p>
+
+# The whole-book PDF is built with LaTeX in CI and published next to the HTML as statistical-hydrology.pdf.
+latex:
+  latex_engine: xelatex
+  latex_documents:
+    targetname: statistical-hydrology.tex
+
+sphinx:
+  recursive_update: true   # merge the options below into the ones generated above
+  config:
+    html_last_updated_fmt: "%Y-%m-%d"
+    templates_path: [_templates]
+    # Parse Markdown produced by code cells (tables) as MyST, so pipe tables and $math$ render.
+    nb_render_markdown_format: myst
+    # PDF: chapter, section and table numbers are written by hand in the titles and captions
+    # ("4.2 The logarithmic profile", "Table 4.1."), so stop LaTeX from adding its own as well.
+    latex_elements:
+      preamble: |
+        \setcounter{secnumdepth}{-1}
+        \makeatletter
+        \long\def\@makecaption#1#2{\vskip\abovecaptionskip{\centering #2\par}\vskip\belowcaptionskip}
+        \makeatother
+    html_theme_options:
+      footer_content_items: [extra-footer.html, last-updated.html]
+      # "Lab homepage" link in the header, next to the buttons (as in the water-history book).
+      article_header_end: [lab-home.html, article-header-buttons.html]
+      icon_links:
+        - name: Download the book as PDF
+          url: https://hydroclimatol.com/statistical-hydrology/statistical-hydrology.pdf
+          icon: fa-solid fa-file-pdf
+          type: fontawesome

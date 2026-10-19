@@ -1,0 +1,32 @@
+# Table of contents: https://jupyterbook.org/en/stable/structure/toc.html
+# Chapter, section, figure and table numbers are written in the chapter files themselves.
+format: jb-book
+root: intro
+parts:
+  - caption: "Part I. Probability foundations"
+    chapters:
+      - file: chapters/ch01_statistics_and_hydrological_variability
+      - file: chapters/ch02_probability_and_events
+      - file: chapters/ch03_random_variables
+      - file: chapters/ch04_moments_and_descriptive_statistics
+  - caption: "Part II. Distributions and frequency analysis"
+    chapters:
+      - file: chapters/ch05_discrete_distributions
+      - file: chapters/ch06_continuous_distributions
+      - file: chapters/ch07_parameter_estimation
+      - file: chapters/ch08_frequency_analysis
+      - file: chapters/ch09_risk_reliability_and_uncertainty
+  - caption: "Part III. Inference and statistical models"
+    chapters:
+      - file: chapters/ch10_sampling_and_hypothesis_tests
+      - file: chapters/ch11_regression_and_correlation
+      - file: chapters/ch12_multivariate_methods
+  - caption: "Part IV. Time series and dependence"
+    chapters:
+      - file: chapters/ch13_trend_seasonality_and_stationarity
+      - file: chapters/ch14_stochastic_time_series_models
+      - file: chapters/ch15_copulas_and_joint_extremes
+  - caption: "Appendices"
+    chapters:
+      - file: appendices/appA_statistical_tables
+      - file: appendices/appB_python_for_statistical_hydrology

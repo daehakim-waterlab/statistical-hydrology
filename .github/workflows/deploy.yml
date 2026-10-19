@@ -1,0 +1,67 @@
+# Build the book (HTML + PDF) and publish it to GitHub Pages on every push to main.
+# Requires Settings → Pages → Build and deployment → Source: "GitHub Actions".
+name: Deploy book
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time; a newer push waits instead of cancelling a running deploy.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    # Pinned: ubuntu-latest moves to Ubuntu 26 on 2026-10-19.
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Python packages
+        run: pip install -r requirements.txt
+
+      - name: Install LaTeX (for the PDF)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            texlive-latex-recommended texlive-latex-extra \
+            texlive-fonts-recommended texlive-fonts-extra \
+            texlive-xetex latexmk xindy fonts-freefont-otf
+
+      - name: Build HTML (runs every code cell)
+        run: jupyter-book build . --warningiserror --keep-going
+
+      # A PDF failure does not block the web deployment; the run is still marked with a warning.
+      - name: Build PDF
+        continue-on-error: true
+        run: |
+          jupyter-book build . --builder pdflatex
+          cp _build/latex/statistical-hydrology.pdf _build/html/statistical-hydrology.pdf
+
+      - uses: actions/configure-pages@v6
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _build/html
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
