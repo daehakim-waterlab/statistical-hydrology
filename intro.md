@@ -4,7 +4,7 @@ An online textbook for the undergraduate Statistical Hydrology course in the Dep
 
 ```{admonition} Work in progress
 :class: note
-The chapters are being written. The table of contents shows the planned structure of the book.
+All fifteen chapters and both appendices are now available. The Colab labs are being prepared and will be added as they are completed.
 ```
 
 Rainfall, streamflow and groundwater levels vary in ways that cannot be predicted in detail, yet structures must be designed and water must be allocated for an uncertain future. This book develops the probability and statistics needed to describe that variability, to estimate design values from short records, to test whether records have changed, and to model how hydrological variables depend on one another and on their own past.
